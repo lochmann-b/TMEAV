@@ -1,0 +1,14 @@
+<html>
+    <h1>
+        The Magic Email Address Validator
+    </h1>
+    <body>
+        <form method="POST">
+            <input type="text" name="email" />
+            <input type="submit">
+        </form>
+        {% if email %}
+        {{ email }} : {{ check_result }}
+        {% endif %}
+    </body>
+</html>
