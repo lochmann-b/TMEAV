@@ -4,9 +4,7 @@ def check_email_address(email_address):
     to ensure the user did not enter something else than an email address by mistake"""
     
     import re
-    #The regular expression for email addresses still needs to be added. This is just an example regex
-    regexp = re.compile(r'ba[rzd]')#re.compile([^@]+@[^@]+\.[^@]+)
-    
+    regexp = re.compile(r"[^@]+@[^@]+\.[^@]+")
     if regexp.search(email_address):
         print('This is likely an email address')
     else:
