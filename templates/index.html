@@ -3,11 +3,11 @@
         The Magic Email Address Validator
     </h1>
     <body>
-        <form method="POST">
+        <form method="POST"> <!-- send a post request to the server when submit clicked -->
             <input type="text" name="email" />
-            <input type="submit">
+            <input type="submit"> <!-- submit button -->
         </form>
-        {% if email %}
+        {% if email %} <!-- render check result if present -->
         {{ email }} : {{ check_result }}
         {% endif %}
     </body>
