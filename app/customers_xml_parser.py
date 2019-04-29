@@ -1,5 +1,5 @@
 from xml.sax import make_parser, handler
-from email_utils import is_email_address_valid
+from  app.email_utils import is_email_address_valid
 
 class CustomerHandler(handler.ContentHandler):
 
@@ -69,3 +69,4 @@ def check_email_addresses(file):
     parser.parse(file)
     return cust_handler.get_invalid_lines()
     
+print(check_email_addresses("sampleCustomers.xml"))

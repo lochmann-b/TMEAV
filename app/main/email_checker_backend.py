@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
-from email_utils import is_email_address_valid
+from app.email_utils import is_email_address_valid
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../templates")
 
 
 '''

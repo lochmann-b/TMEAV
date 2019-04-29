@@ -1,8 +1,8 @@
-#Note to run the test type python test_function.py in the terminal window
+#Note to run the test, type "python -m unittest tests/test_is_email_address_valid.py" in the terminal window
 
 import unittest
 
-from email_utils import is_email_address_valid
+from app.email_utils import is_email_address_valid
 
 
 class TestEmailChecker(unittest.TestCase):
