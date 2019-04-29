@@ -6,6 +6,6 @@ def check_email_address(email_address):
     import re
     regexp = re.compile(r"[^@]+@[^@]+\.[^@]+")
     if regexp.search(email_address):
-        print('This is likely an email address')
+        return 'This is likely an email address'
     else:
-        print('This is not an email address')
+        return 'This is not an email address'
