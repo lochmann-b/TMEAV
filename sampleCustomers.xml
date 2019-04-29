@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Workbook>
+    <Row ss:Height="12.7559">
+        <Cell>
+            <Data ss:Type="String">Name</Data>
+        </Cell>
+        <Cell ss:StyleID="ce2">
+            <Data ss:Type="String">email</Data>
+        </Cell>
+    </Row>
+    <Row ss:Height="12.7559">
+        <Cell>
+            <Data ss:Type="String">Bux Bunny</Data>
+        </Cell>
+        <Cell ss:Index="2" />
+    </Row>
+    <Row ss:Height="12.7559">
+        <Cell>
+            <Data ss:Type="String">Axl Rose</Data>
+        </Cell>
+        <Cell ss:Index="2">
+            axl.rose@gunsnroses.com
+        </Cell>
+    </Row>
+    <Row ss:Height="12.7559">
+        <Cell>
+            <Data ss:Type="String">Arthur Dent</Data>
+        </Cell>
+        <Cell ss:StyleID="ce2">
+            <Data ss:Type="String">42@betelgeuse</Data>
+        </Cell>
+    </Row>
+</Workbook>
