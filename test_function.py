@@ -1,3 +1,5 @@
+#Note to run the test type python test_function.py in the terminal window
+
 import unittest
 
 from check_email_address_function import check_email_address
