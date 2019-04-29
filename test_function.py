@@ -2,7 +2,7 @@
 
 import unittest
 
-from check_email_address_function import check_email_address
+from email_utils import is_email_address_valid
 
 
 class TestEmailChecker(unittest.TestCase):
@@ -11,8 +11,8 @@ class TestEmailChecker(unittest.TestCase):
         Test if string has no "@" sign result is FALSE
         """
         data = "This string does not contain an 'at' sign"
-        result = check_email_address(data)
-        self.assertEqual(result, 'This is not an email address')
+        result = is_email_address_valid(data)
+        self.assertEqual(result, False)
     
     def test_2(self):
         """
@@ -20,8 +20,8 @@ class TestEmailChecker(unittest.TestCase):
         result is FALSE
         """
         data = "This string does contain one @ sign"
-        result = check_email_address(data)
-        self.assertEqual(result, 'This is not an email address')
+        result = is_email_address_valid(data)
+        self.assertEqual(result, False)
     
     def test_3(self):
         """
@@ -29,24 +29,24 @@ class TestEmailChecker(unittest.TestCase):
         @ sign is FALSE
         """
         data = "firstname@lastname@gmail.com"
-        result = check_email_address(data)
-        self.assertEqual(result, 'This is not an email address')
+        result = is_email_address_valid(data)
+        self.assertEqual(result, False)
     
     def test_4(self):
         """
         Test firstname.lastname+extra@yahoo.com is TRUE
         """
         data = "firstname.lastname+extra@yahoo.com"
-        result = check_email_address(data)
-        self.assertEqual(result, 'This is likely an email address')
+        result = is_email_address_valid(data)
+        self.assertEqual(result, True)
 
     def test_5(self):
         """
         Test firstname.lastname@domain.com is TRUE
         """
         data = "firstname.lastname@domain.edu"
-        result = check_email_address(data)
-        self.assertEqual(result, 'This is likely an email address')
+        result = is_email_address_valid(data)
+        self.assertEqual(result, True)
 
 if __name__ == '__main__':
     unittest.main()
