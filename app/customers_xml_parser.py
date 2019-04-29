@@ -68,5 +68,3 @@ def check_email_addresses(file):
     parser.setContentHandler(cust_handler)
     parser.parse(file)
     return cust_handler.get_invalid_lines()
-    
-print(check_email_addresses("sampleCustomers.xml"))

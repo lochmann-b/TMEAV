@@ -1,14 +1,38 @@
 <html>
-    <h1>
-        The Magic Email Address Validator
-    </h1>
-    <body>
-        <form method="POST"> <!-- send a post request to the server when submit clicked -->
-            <input type="text" name="email" />
-            <input type="submit"> <!-- submit button -->
-        </form>
-        {% if email %} <!-- render check result if present -->
-        {{ email }} : {{ check_result }}
-        {% endif %}
-    </body>
+<h1>
+    The Magic Email Address Validator
+</h1>
+
+<body>
+    <form method="POST">
+        <!-- send a post request to the server when submit clicked -->
+        <input type="text" name="email" />
+        <input type="submit"> <!-- submit button -->
+    </form>
+
+    <form method="post" enctype="multipart/form-data">
+        <!-- send a post request to the server when submit clicked -->
+        <input name="file" type="file" size="50" accept="text/xml">
+        <p></p>
+        <input type="submit"> <!-- submit button -->
+    </form>
+
+    {% if email %}
+    <!-- render check result if present -->
+    {{ email }} : {{ check_result }}
+    {% endif %}
+
+    {% if invalid_lines %}
+    <h3>Invalid Lines</h3>
+    <table>
+        {%for line in invalid_lines %}
+        <tr>
+            <td>{{ line[0] }} </td>
+            <td> {{ line[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+
 </html>
