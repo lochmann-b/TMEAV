@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from app.customers_xml_parser import check_email_addresses
 
 os.environ.setdefault("FLASK_APP", "app/main/email_checker_backend.py")
-app = Flask(__name__, template_folder="../templates")
+application = Flask(__name__, template_folder="../templates")
 
 
 '''
@@ -13,7 +13,7 @@ Handles GET and POST requests to /.
 A get request will be invoked by the browser when browsing to /
 A post request will be invoked by the browser when the user submits the form with the email address
 '''
-@app.route('/', methods=['GET', 'POST'])
+@application.route('/', methods=['GET', 'POST'])
 def index():
     email = ''
     check_result = ''
