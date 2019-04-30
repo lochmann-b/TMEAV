@@ -1,38 +1,57 @@
 <html>
-<h1>
-    The Magic Email Address Validator
-</h1>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
 
 <body>
-    <form method="POST">
-        <!-- send a post request to the server when submit clicked -->
-        <input type="text" name="email" />
-        <input type="submit"> <!-- submit button -->
-    </form>
+    <div class="container">
+        <h1>
+            The Magic Email Address Validator
+        </h1>
+        <div class="card">
+            <h2>Validate a single email address</h2>
+            <form method="POST">
+                <!-- send a post request to the server when submit clicked -->
+                <input type="text" name="email" />
+                <input type="submit"> <!-- submit button -->
+            </form>
 
-    <form method="post" enctype="multipart/form-data">
-        <!-- send a post request to the server when submit clicked -->
-        <input name="file" type="file" size="50" accept="text/xml">
-        <p></p>
-        <input type="submit"> <!-- submit button -->
-    </form>
+            {% if email %}            
+            <!-- render check result if present -->            
+                {% if check_result ==True %}
+                    {{ email }} is likely an email address
+                {% else %}
+                    {{ email }} is not an email address
+                {% endif %}    
+            {% endif %}
 
-    {% if email %}
-    <!-- render check result if present -->
-    {{ email }} : {{ check_result }}
-    {% endif %}
+        </div>
 
-    {% if invalid_lines %}
-    <h3>Invalid Lines</h3>
-    <table>
-        {%for line in invalid_lines %}
-        <tr>
-            <td>{{ line[0] }} </td>
-            <td> {{ line[1] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
+        <div class="card">
+            <h2>Validate all email addresses within an xml file</h2>
+            <form method="post" enctype="multipart/form-data">
+                <!-- send a post request to the server when submit clicked -->
+                <input name="file" type="file" accept="text/xml">
+                <input type="submit"> <!-- submit button -->
+            </form>
+        </div>
+
+        {% if invalid_lines %}
+        <div class="card">
+            <h3>Invalid Lines</h3>
+            <table>
+                {%for line in invalid_lines %}
+                <tr>
+                    <td>{{ line[0] }} </td>
+                    <td> {{ line[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+
+    </div>    
 </body>
 
 </html>
