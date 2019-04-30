@@ -1,12 +1,12 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from app.email_utils import is_email_address_valid
 from werkzeug.utils import secure_filename
 from app.customers_xml_parser import check_email_addresses
 
+#configuratoin
 os.environ.setdefault("FLASK_APP", "app/main/email_checker_backend.py")
-application = Flask(__name__, template_folder="../templates")
-
+application = Flask(__name__, template_folder="../templates", static_folder="../static")
 
 '''
 Handles GET and POST requests to /.
