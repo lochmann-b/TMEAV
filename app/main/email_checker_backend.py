@@ -1,11 +1,14 @@
+
 import os
-from flask import Flask, render_template, request, send_from_directory
+
+import datetime
+
+from flask import Flask, jsonify, request, render_template, abort
 from app.email_utils import is_email_address_valid
-from werkzeug.utils import secure_filename
+
 from app.customers_xml_parser import check_email_addresses
 
 #configuratoin
-os.environ.setdefault("FLASK_APP", "app/main/email_checker_backend.py")
 application = Flask(__name__, template_folder="../templates", static_folder="../static")
 
 '''
@@ -26,8 +29,26 @@ def index():
     elif request.method == "POST" and request.files:
         file = request.files['file']
         if file:
-            filename = secure_filename(file.filename)
             invalid_lines = check_email_addresses(file)
 
     # render index.html
     return render_template('index.html', email=email, check_result=check_result, invalid_lines=invalid_lines)
+
+@application.route('/api/v1/isEmailAddressValid', methods=['POST']) #respond to POST requests
+def api_is_email_address_valid():
+    if not request.json or not 'emailAddress' in request.json: #check if request comes with json data containing an email
+        return abort(400, "No emailAddress found in request body") #no email in body. abort with error 400 bad request
+    email = request.json['emailAddress'] #extract email address from json
+    response = {"emailAddress": email, "isValid": is_email_address_valid(email)} #create a response dictionary
+    return jsonify(response) #return the response as json
+
+
+@application.route('/api/v1/areEmailAddressesValid', methods=['POST']) #respond to POST requests
+def api_are_email_addresses_valid():
+    file = request.files.get('file') #extract file from request body
+    if not file:        
+        return abort(400) #no file found, abrot with status code 400 bad request
+    try:            
+        return jsonify(check_email_addresses(file)) #check file content and return result as json
+    except:
+        abort (400, 'Could not parse file {}'.format(file.filename)) #an error happened. return status code 400 bad request
