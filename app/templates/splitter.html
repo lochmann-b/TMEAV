@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <script type="text/javascript">
+
+        function copyToClipBoard(elementId) {
+            var copyText = document.getElementById(elementId);
+            copyText.select();
+            document.execCommand("copy");
+            copyText.clearSelectin()
+        }
+
+    </script>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>
+            The Magic Email Address Validator
+        </h1>
+
+        <div class="card">
+            <h2>Validate all email addresses from an xml file</h2>
+            <form action="splitter" method="post" enctype="multipart/form-data">
+                <!-- send a post request to the server when submit clicked -->
+                <ul>
+                    <li>Upload a xml file</li>
+                    <li><input name="file" type="file" accept="text/xml"></li>
+                    <li>Select chunk size</li>
+                    <li><select name="chunkSize"></li>
+                    <option>50</option>
+                    <option>100</option>
+                    <option>150</option>
+                    <option>200</option>
+                    <option selected>250</option>
+                    <option>300</option>
+                    <option>350</option>
+                    <option>400</option>
+                    <option>450</option>
+                    <option>500</option>
+                    </select>
+                    <li>
+                        <input type="submit"> <!-- submit button -->
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        {% if lines %}
+
+        <h3>Splitted Lines</h3>
+        {%for current_lines in lines %}
+        <div class="chunkCard">
+            <h4> Chunk {{ loop.index }} </h4>
+            <textarea class="chunk" readonly id='chunk_{{loop.index}}'>
+{{ current_lines }}
+            </textarea>
+            <button onclick="copyToClipBoard('chunk_{{loop.index}}')">
+                Copy
+            </button>
+        </div>
+        {% endfor %}
+
+        {% endif %}
+
+    </div>
+</body>
+
+</html>
