@@ -1,12 +1,12 @@
 import os
-from flask import Flask, render_template, request, send_from_directory
-from app.email_utils import are_email_addresses_valid
-from werkzeug.utils import secure_filename
-from app.customers_xml_parser import check_email_addresses
+from flask import Flask, render_template, request, send_from_directory, jsonify, abort
+from app.email_utils import are_email_addresses_valid, is_email_address_valid
 
-#configuratoin
-os.environ.setdefault("FLASK_APP", "app/main/email_checker_backend.py")
-application = Flask(__name__, template_folder="../templates", static_folder="../static")
+from app.customers_xml_parser import check_email_addresses, split_email_addresses
+
+# configuratoin
+application = Flask(__name__, template_folder="../templates",
+                    static_folder="../static")
 
 '''
 Handles GET and POST requests to /.
@@ -26,8 +26,56 @@ def index():
     elif request.method == "POST" and request.files:
         file = request.files['file']
         if file:
-            filename = secure_filename(file.filename)
             invalid_lines = check_email_addresses(file)
 
     # render index.html
     return render_template('index.html', email=email, check_result=check_result, invalid_lines=invalid_lines)
+
+
+@application.route('/splitter', methods=['GET', 'POST'])
+def xml_file_splitter():
+    lines = []
+    if request.method == "POST" and request.files:
+        file = request.files['file']
+        chunkSize = int(request.form['chunkSize'])
+        
+        if file:
+            lines = split_email_addresses(file, chunkSize)
+            print(lines)
+
+    # render index.html
+    return render_template('splitter.html',  lines=lines)
+
+
+###########
+# WEB API #
+###########
+
+# respond to POST requests
+@application.route('/api/v1/isEmailAddressValid', methods=['POST'])
+def api_is_email_address_valid():
+    # check if request comes with json data containing an email
+    if not request.json or not 'emailAddress' in request.json:
+        # no email in body. abort with error 400 bad request
+        return abort(400, "No emailAddress found in request body")
+    print(request.json)
+    email = request.json['emailAddress']  # extract email address from json
+    # create a response dictionary
+    response = {"emailAddress": email,
+                "isValid": is_email_address_valid(email)}
+    return jsonify(response)  # return the response as json
+
+
+# respond to POST requests
+@application.route('/api/v1/areEmailAddressesValid', methods=['POST'])
+def api_are_email_addresses_valid():
+    file = request.files.get('file')  # extract file from request body
+    if not file:
+        # no file found, abrot with status code 400 bad request
+        return abort(400)
+    try:
+        # check file content and return result as json
+        return jsonify(check_email_addresses(file))
+    except:
+        # an error happened. return status code 400 bad request
+        abort(400, 'Could not parse file {}'.format(file.filename))
