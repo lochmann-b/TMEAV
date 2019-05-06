@@ -1,5 +1,5 @@
 from xml.sax import make_parser, handler
-from  app.email_utils import is_email_address_valid
+from  app.email_utils import are_email_addresses_valid
 
 class CustomerHandler(handler.ContentHandler):
 
@@ -36,7 +36,7 @@ class CustomerHandler(handler.ContentHandler):
     def is_valid_line(self):
         #incomplete lines are considered as valid
         if self.current_name and self.current_email:
-            return is_email_address_valid(self.current_email)
+           return are_email_addresses_valid(self.current_email)
         return True
 
     def endElement(self, name):

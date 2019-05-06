@@ -30,4 +30,12 @@
             <Data ss:Type="String">42@betelgeuse</Data>
         </Cell>
     </Row>
+    <Row ss:Height="12.7559">
+        <Cell>
+            <Data ss:Type="String">Laura Dekker</Data>
+        </Cell>
+        <Cell ss:StyleID="ce2">
+            <Data ss:Type="String">Laura.decker@lauradecker.nl;laura@lauradekkerworldsailingfoundation.com</Data>
+        </Cell>
+    </Row>
 </Workbook>
