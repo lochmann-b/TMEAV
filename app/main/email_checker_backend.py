@@ -38,6 +38,7 @@ def index():
 def api_is_email_address_valid():
     if not request.json or not 'emailAddress' in request.json: #check if request comes with json data containing an email
         return abort(400, "No emailAddress found in request body") #no email in body. abort with error 400 bad request
+    print(request.json)
     email = request.json['emailAddress'] #extract email address from json
     response = {"emailAddress": email, "isValid": is_email_address_valid(email)} #create a response dictionary
     return jsonify(response) #return the response as json
