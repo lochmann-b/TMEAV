@@ -41,5 +41,5 @@ class CustomerHandler(handler.ContentHandler):
             if self.line_filter(self.current_name, self.current_email):
                 self.lines.append((self.current_name, self.current_email))
 
-    def get_invalid_lines(self):
+    def get_lines(self):
         return self.lines

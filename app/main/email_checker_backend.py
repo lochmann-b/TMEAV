@@ -38,10 +38,9 @@ def xml_file_splitter():
     if request.method == "POST" and request.files:
         file = request.files['file']
         chunkSize = int(request.form['chunkSize'])
-        
+
         if file:
-            lines = split_email_addresses(file, chunkSize)
-            print(lines)
+            lines = split_email_addresses(file, chunkSize)            
 
     # render index.html
     return render_template('splitter.html',  lines=lines)
