@@ -2,13 +2,13 @@
 {% block page_content %}
     {% import "bootstrap/wtf.html" as wtf %}
 
-    {{ wtf.quick_form(form) }}
+    {{ wtf.quick_form(form, button_map={'submit':'primary'}) }}
     
     <!-- render check result if present -->            
     
     {% if invalid_lines %}
     <h3>Invalid Lines</h3>
-    <table>
+    <table class="table">
         {%for line in invalid_lines %}
         <tr>
             <td>{{ line[0] }} </td>

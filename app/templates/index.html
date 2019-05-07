@@ -2,14 +2,19 @@
 {% block page_content %}
     {% import "bootstrap/wtf.html" as wtf %}
 
-    {{ wtf.quick_form(formUploadEmail) }}
-    
+    {{ wtf.quick_form(formUploadEmail, button_map={'submit':'primary'}) }}
     
     <!-- render check result if present -->            
-    {% if check_result ==True %}
-        {{ email }} is likely an email address
-    {% elif check_result == False %}
-        {{ email }} is not an email address
-    {% endif %}    
+    <div style="margin-top: 20px;">
+        {% if check_result ==True %}
+            <div class="alert alert-success">   
+                {{ email }} is likely an email address
+            </div>
+        {% elif check_result == False %}
+            <div class="alert alert-danger">
+                {{ email }} is not an email address
+            </div>
+        {% endif %}    
+    </div>
 
 {% endblock %}

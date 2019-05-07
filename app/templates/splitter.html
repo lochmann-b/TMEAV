@@ -17,7 +17,7 @@
 {% block page_content %}
     {% import "bootstrap/wtf.html" as wtf %}
 
-    {{ wtf.quick_form(form) }}
+    {{ wtf.quick_form(form, button_map={'submit':'primary'}) }}
     
     <!-- render check result if present -->            
 
@@ -25,14 +25,16 @@
 
     <h3>Splitted Lines</h3>
     {%for current_lines in lines %}
-    <div>
+    <div class="form-group">
         <h4> Chunk {{ loop.index }} </h4>
-        <textarea readonly id='chunk_{{loop.index}}' rows="4" style="width:100%">
+        <textarea class="form-control" readonly id='chunk_{{loop.index}}' rows="4" syle="margin:1em;">
 {{ current_lines }}
         </textarea>
-        <button onclick="copyToClipBoard('chunk_{{loop.index}}')">
-            Copy To Clipboard
-        </button>
+        <p style="margin-top: 0.5em;">
+            <button class="btn btn-default" onclick="copyToClipBoard('chunk_{{loop.index}}')">
+                Copy To Clipboard
+            </button>
+        </p>
     </div>
     {% endfor %}
 
