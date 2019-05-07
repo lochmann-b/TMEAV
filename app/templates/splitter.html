@@ -1,8 +1,7 @@
-<html>
+{% extends "base.html" %}
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
+{% block scripts %}
+    {{ super() }}
     <script type="text/javascript">
 
         function copyToClipBoard(elementId) {
@@ -13,53 +12,30 @@
         }
 
     </script>
+{% endblock %}
 
-</head>
+{% block page_content %}
+    {% import "bootstrap/wtf.html" as wtf %}
 
-<body>
-    <div class="container">
-        <h1>
-            The Magic Email Address Validator
-        </h1>
+    {{ wtf.quick_form(form) }}
+    
+    <!-- render check result if present -->            
 
-        <div class="card">
-            <h2>Validate all email addresses from an xml file</h2>
-            <form action="splitter" method="post" enctype="multipart/form-data">
-                <!-- send a post request to the server when submit clicked -->
-                <ul>
-                    <li>Upload a xml file</li>
-                    <li><input name="file" type="file" accept="text/xml"></li>
-                    <li>Select chunk size</li>
-                    <li><select name="chunkSize"></li>
-                        {% for size in (50, 100, 150, 200, 250, 500, 550, 600, 650, 700, 750, 800) %}                    
-                            <option {% if size==chunk_size %}selected{% endif %}>{{ size }}</option>                    
-                        {% endfor %}
-                    </select>
-                    <li>
-                        <input type="submit"> <!-- submit button -->
-                    </li>
-                </ul>
-            </form>
-        </div>
+    {% if lines %}
 
-        {% if lines %}
-
-        <h3>Splitted Lines</h3>
-        {%for current_lines in lines %}
-        <div class="chunkCard">
-            <h4> Chunk {{ loop.index }} </h4>
-            <textarea class="chunk" readonly id='chunk_{{loop.index}}'>
+    <h3>Splitted Lines</h3>
+    {%for current_lines in lines %}
+    <div>
+        <h4> Chunk {{ loop.index }} </h4>
+        <textarea readonly id='chunk_{{loop.index}}' rows="4" style="width:100%">
 {{ current_lines }}
-            </textarea>
-            <button onclick="copyToClipBoard('chunk_{{loop.index}}')">
-                Copy To Clipboard
-            </button>
-        </div>
-        {% endfor %}
-
-        {% endif %}
-
+        </textarea>
+        <button onclick="copyToClipBoard('chunk_{{loop.index}}')">
+            Copy To Clipboard
+        </button>
     </div>
-</body>
+    {% endfor %}
 
-</html>
+    {% endif %}
+
+{% endblock %}

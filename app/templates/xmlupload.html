@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block page_content %}
+    {% import "bootstrap/wtf.html" as wtf %}
+
+    {{ wtf.quick_form(form) }}
+    
+    <!-- render check result if present -->            
+    
+    {% if invalid_lines %}
+    <h3>Invalid Lines</h3>
+    <table>
+        {%for line in invalid_lines %}
+        <tr>
+            <td>{{ line[0] }} </td>
+            <td> {{ line[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+{% endblock %}

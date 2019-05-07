@@ -1,57 +1,15 @@
-<html>
+{% extends "base.html" %}
+{% block page_content %}
+    {% import "bootstrap/wtf.html" as wtf %}
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
+    {{ wtf.quick_form(formUploadEmail) }}
+    
+    
+    <!-- render check result if present -->            
+    {% if check_result ==True %}
+        {{ email }} is likely an email address
+    {% elif check_result == False %}
+        {{ email }} is not an email address
+    {% endif %}    
 
-<body>
-    <div class="container">
-        <h1>
-            The Magic Email Address Validator
-        </h1>
-        <div class="card">
-            <h2>Validate email addresses separated by ;</h2>
-            <form method="POST">
-                <!-- send a post request to the server when submit clicked -->
-                <input type="text" name="email" />
-                <input type="submit"> <!-- submit button -->
-            </form>
-
-            {% if email %}            
-            <!-- render check result if present -->            
-                {% if check_result ==True %}
-                    {{ email }} is likely an email address
-                {% else %}
-                    {{ email }} is not an email address
-                {% endif %}    
-            {% endif %}
-
-        </div>
-
-        <div class="card">
-            <h2>Validate all email addresses from an xml file</h2>
-            <form method="post" enctype="multipart/form-data">
-                <!-- send a post request to the server when submit clicked -->
-                <input name="file" type="file" accept="text/xml">
-                <input type="submit"> <!-- submit button -->
-            </form>
-        </div>
-
-        {% if invalid_lines %}
-        <div class="card">
-            <h3>Invalid Lines</h3>
-            <table>
-                {%for line in invalid_lines %}
-                <tr>
-                    <td>{{ line[0] }} </td>
-                    <td> {{ line[1] }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-        {% endif %}
-
-    </div>    
-</body>
-
-</html>
+{% endblock %}

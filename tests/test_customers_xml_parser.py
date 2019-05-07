@@ -9,7 +9,6 @@ class TestCostomersXMLParser(unittest.TestCase):
     def test_check_email_addresses(self):
         file_path = "tests/sampleCustomers.xml"
         result = check_email_addresses(open(file_path, "r"))
-        print(result)
         self.assertEqual(result,  [('Name', 'email'), ('Arthur Dent', '42@betelgeuse')])
 
 if __name__ == '__main__':

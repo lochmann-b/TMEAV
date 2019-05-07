@@ -1,12 +1,19 @@
 import os
 from flask import Flask, render_template, request, send_from_directory, jsonify, abort
 from app.email_utils import are_email_addresses_valid, is_email_address_valid
+from flask_bootstrap import Bootstrap
+
+#forms
+from app.forms.UploadEmailAddressForm import UploadEmailAddressForm
+from app.forms.UploadXMLForm import UploadXMLForm
+from app.forms.SplitXMLForm import SplitXMLForm
 
 from app.customers_xml_parser import check_email_addresses, split_email_addresses
 
 # configuratoin
-application = Flask(__name__, template_folder="../templates",
-                    static_folder="../static")
+application = Flask(__name__, template_folder="../templates")
+application.config['SECRET_KEY'] = "Oachkatzlschwoaf"
+bootstrap = Bootstrap(application)
 
 '''
 Handles GET and POST requests to /.
@@ -19,34 +26,45 @@ def index():
     check_result = ''
     invalid_lines = []
 
-    # check if an email address has been submitted. If so, check the email address vor syntactic correctness
-    if request.method == "POST" and "email" in request.form:
-        email = request.form["email"]
+    #create form
+    form = UploadEmailAddressForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
         check_result = are_email_addresses_valid(email)
-    elif request.method == "POST" and request.files:
-        file = request.files['file']
-        if file:
-            invalid_lines = check_email_addresses(file)
+        form.email.data=''
+    
+    return render_template('index.html', formUploadEmail=form, email=email, check_result=check_result)
+
+
+@application.route('/xmlupload', methods=['GET', 'POST'])
+def uploadxml():
+    email = ''
+    check_result = ''
+    invalid_lines = []
+
+    form = UploadXMLForm()
+
+    # check if an email address has been submitted. If so, check the email address vor syntactic correctness
+    if form.validate_on_submit():      
+        file = form.file.data.file
+        invalid_lines = check_email_addresses(file)
 
     # render index.html
-    return render_template('index.html', email=email, check_result=check_result, invalid_lines=invalid_lines)
+    return render_template('xmlupload.html', form=form, invalid_lines=invalid_lines)
 
 
 @application.route('/splitter', methods=['GET', 'POST'])
 def xml_file_splitter():
     lines = []
-    
-    #default value
-    chunk_size = 500
-    if request.method == "POST" and request.files:
-        file = request.files['file']
-        chunk_size = int(request.form['chunkSize'])
-
-        if file:
-            lines = split_email_addresses(file, chunk_size)            
+    form = SplitXMLForm()  
+    if form.validate_on_submit():
+        file = form.file.data.file
+        chunk_size = int(form.chunk_size.data)
+        lines = split_email_addresses(file, chunk_size)            
 
     # render index.html
-    return render_template('splitter.html',  lines=lines, chunk_size=chunk_size)
+    return render_template('splitter.html', form=form, lines=lines)
 
 
 ###########
@@ -60,7 +78,6 @@ def api_is_email_address_valid():
     if not request.json or not 'emailAddress' in request.json:
         # no email in body. abort with error 400 bad request
         return abort(400, "No emailAddress found in request body")
-    print(request.json)
     email = request.json['emailAddress']  # extract email address from json
     # create a response dictionary
     response = {"emailAddress": email,
