@@ -35,15 +35,18 @@ def index():
 @application.route('/splitter', methods=['GET', 'POST'])
 def xml_file_splitter():
     lines = []
+    
+    #default value
+    chunk_size = 500
     if request.method == "POST" and request.files:
         file = request.files['file']
-        chunkSize = int(request.form['chunkSize'])
+        chunk_size = int(request.form['chunkSize'])
 
         if file:
-            lines = split_email_addresses(file, chunkSize)            
+            lines = split_email_addresses(file, chunk_size)            
 
     # render index.html
-    return render_template('splitter.html',  lines=lines)
+    return render_template('splitter.html',  lines=lines, chunk_size=chunk_size)
 
 
 ###########
