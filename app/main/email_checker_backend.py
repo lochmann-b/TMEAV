@@ -47,7 +47,7 @@ def uploadxml():
 
     # check if an email address has been submitted. If so, check the email address vor syntactic correctness
     if form.validate_on_submit():      
-        file = form.file.data.file
+        file = form.file.data
         invalid_lines = check_email_addresses(file)
 
     # render index.html
@@ -59,7 +59,7 @@ def xml_file_splitter():
     lines = []
     form = SplitXMLForm()  
     if form.validate_on_submit():
-        file = form.file.data.file
+        file = form.file.data
         chunk_size = int(form.chunk_size.data)
         lines = split_email_addresses(file, chunk_size)            
 
