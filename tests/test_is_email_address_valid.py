@@ -2,7 +2,7 @@
 
 import unittest
 
-from app.email_utils import is_email_address_valid, are_email_addresses_valid
+from app.main.email_utils import is_email_address_valid, are_email_addresses_valid
 
 
 class TestEmailChecker(unittest.TestCase):

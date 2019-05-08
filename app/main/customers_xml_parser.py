@@ -1,6 +1,6 @@
 from xml.sax import make_parser
-from app.email_utils import are_email_addresses_valid
-from app.CustomerHandler import CustomerHandler
+from .email_utils import are_email_addresses_valid
+from .CustomerHandler import CustomerHandler
 
 def is_invalid_line(current_name, current_email):
     #incomplete lines are considered as valid

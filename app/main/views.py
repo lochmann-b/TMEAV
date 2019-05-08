@@ -1,46 +1,19 @@
-import os
-from flask import Flask, render_template, request, send_from_directory, jsonify, abort
-from app.email_utils import are_email_addresses_valid, is_email_address_valid
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-
-#forms
-from app.forms.UploadEmailAddressForm import UploadEmailAddressForm
-from app.forms.UploadXMLForm import UploadXMLForm
-from app.forms.SplitXMLForm import SplitXMLForm
-
-from app.customers_xml_parser import check_email_addresses, split_email_addresses
-
-application = Flask(__name__, template_folder="../templates")
-base_dir = os.path.abspath(os.path.dirname(__file__))
-
-# configuratoin
-application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'data.sqlite')
-print(application.config['SQLALCHEMY_DATABASE_URI'])
-application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-application.config['SECRET_KEY'] = "Oachkatzlschwoaf"
-
-db = SQLAlchemy(application)
-migrate = Migrate(application, db)
-bootstrap = Bootstrap(application)
-
-# model definition
-class User(db.Model):
-    __tablename__ = 'Users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, index=True)
-
-    def __repr__(self):
-        return '<User %r>' % self.username
-
+from flask import render_template, session, url_for
+from . import main
+from .. import db
+from ..models import User
+from .forms import UploadEmailAddressForm
+from .forms import UploadXMLForm
+from .forms import SplitXMLForm
+from .email_utils import are_email_addresses_valid, is_email_address_valid
+from .customers_xml_parser import check_email_addresses, split_email_addresses
 
 '''
 Handles GET and POST requests to /.
 A get request will be invoked by the browser when browsing to /
 A post request will be invoked by the browser when the user submits the form with the email address
 '''
-@application.route('/', methods=['GET', 'POST'])
+@main.route('/', methods=['GET', 'POST'])
 def index():
     email = ''
     check_result = ''
@@ -57,7 +30,7 @@ def index():
     return render_template('index.html', formUploadEmail=form, email=email, check_result=check_result)
 
 
-@application.route('/xmlupload', methods=['GET', 'POST'])
+@main.route('/xmlupload', methods=['GET', 'POST'])
 def uploadxml():
     email = ''
     check_result = ''
@@ -74,7 +47,7 @@ def uploadxml():
     return render_template('xmlupload.html', form=form, invalid_lines=invalid_lines)
 
 
-@application.route('/splitter', methods=['GET', 'POST'])
+@main.route('/splitter', methods=['GET', 'POST'])
 def xml_file_splitter():
     lines = []
     form = SplitXMLForm()  
@@ -92,7 +65,7 @@ def xml_file_splitter():
 ###########
 
 # respond to POST requests
-@application.route('/api/v1/isEmailAddressValid', methods=['POST'])
+@main.route('/api/v1/isEmailAddressValid', methods=['POST'])
 def api_is_email_address_valid():
     # check if request comes with json data containing an email
     if not request.json or not 'emailAddress' in request.json:
@@ -106,7 +79,7 @@ def api_is_email_address_valid():
 
 
 # respond to POST requests
-@application.route('/api/v1/areEmailAddressesValid', methods=['POST'])
+@main.route('/api/v1/areEmailAddressesValid', methods=['POST'])
 def api_are_email_addresses_valid():
     file = request.files.get('file')  # extract file from request body
     if not file:

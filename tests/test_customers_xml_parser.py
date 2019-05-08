@@ -2,7 +2,7 @@
 
 import unittest
 
-from app.customers_xml_parser import check_email_addresses
+from app.main.customers_xml_parser import check_email_addresses
 
 
 class TestCostomersXMLParser(unittest.TestCase):
