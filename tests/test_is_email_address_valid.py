@@ -88,7 +88,5 @@ class TestEmailChecker(unittest.TestCase):
         result = are_email_addresses_valid(data)
         self.assertEqual(result, True)
 
-
-
 if __name__ == '__main__':
     unittest.main()

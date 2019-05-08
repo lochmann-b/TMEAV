@@ -1,4 +1,5 @@
 from flask import render_template, session, url_for
+from flask_login import login_required
 from . import main
 from .. import db
 from ..models import User
@@ -13,7 +14,9 @@ Handles GET and POST requests to /.
 A get request will be invoked by the browser when browsing to /
 A post request will be invoked by the browser when the user submits the form with the email address
 '''
+
 @main.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     email = ''
     check_result = ''
@@ -29,8 +32,8 @@ def index():
     
     return render_template('index.html', formUploadEmail=form, email=email, check_result=check_result)
 
-
 @main.route('/xmlupload', methods=['GET', 'POST'])
+@login_required
 def uploadxml():
     email = ''
     check_result = ''
@@ -46,7 +49,7 @@ def uploadxml():
     # render index.html
     return render_template('xmlupload.html', form=form, invalid_lines=invalid_lines)
 
-
+@login_required
 @main.route('/splitter', methods=['GET', 'POST'])
 def xml_file_splitter():
     lines = []
