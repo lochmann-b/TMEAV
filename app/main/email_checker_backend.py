@@ -2,6 +2,8 @@ import os
 from flask import Flask, render_template, request, send_from_directory, jsonify, abort
 from app.email_utils import are_email_addresses_valid, is_email_address_valid
 from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 #forms
 from app.forms.UploadEmailAddressForm import UploadEmailAddressForm
@@ -10,10 +12,28 @@ from app.forms.SplitXMLForm import SplitXMLForm
 
 from app.customers_xml_parser import check_email_addresses, split_email_addresses
 
-# configuratoin
 application = Flask(__name__, template_folder="../templates")
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
+# configuratoin
+application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'data.sqlite')
+print(application.config['SQLALCHEMY_DATABASE_URI'])
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 application.config['SECRET_KEY'] = "Oachkatzlschwoaf"
+
+db = SQLAlchemy(application)
+migrate = Migrate(application, db)
 bootstrap = Bootstrap(application)
+
+# model definition
+class User(db.Model):
+    __tablename__ = 'Users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, index=True)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
 
 '''
 Handles GET and POST requests to /.
