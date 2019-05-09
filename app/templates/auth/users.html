@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block page_content %}
+
+    {% import "bootstrap/wtf.html" as wtf %}
+  
+    <h3>Users</h3>
+
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Admin</th>
+            <th></td>
+            <th></td>
+        </tr>
+        {%for user in users %}
+        <tr>
+            <td>{{ user.id }} </td>
+            <td>{{ user.username }} </td>
+            <td> {{ user.email }}</td>
+            <td> {{ user.admin }}</td>
+            <td> 
+                {% if user.activated == False %}
+                    <a href="{{ url_for('auth.activate', userid=user.id, token=user.generate_confirmation_token()) }}">Activate</a>
+                {% elif user.id != current_user.id %}
+                    <a href="{{ url_for('auth.deactivate', userid=user.id, token=user.generate_confirmation_token()) }}">Deactivate</a>                    
+                {% endif %}
+            </td>
+            <td> 
+                {% if user.id != current_user.id %}
+                    <a href="{{ url_for('auth.delet_user', userid=user.id, token=user.generate_confirmation_token()) }}">Delete</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+
+    
+{% endblock %}

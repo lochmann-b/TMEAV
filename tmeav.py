@@ -1,7 +1,7 @@
 import os
 from app import create_app, db
 from app.models import User
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 
 application = create_app(os.getenv('TMEAV_FLASK_CONFIG') or 'default')
 migrate = Migrate(application, db)
@@ -16,3 +16,8 @@ def test():
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+
+@application.cli.command()
+def deploy():
+    """Deploy database"""
+    upgrade()
