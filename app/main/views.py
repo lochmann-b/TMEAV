@@ -49,8 +49,8 @@ def uploadxml():
     # render index.html
     return render_template('xmlupload.html', form=form, invalid_lines=invalid_lines)
 
-@login_required
 @main.route('/splitter', methods=['GET', 'POST'])
+@login_required
 def xml_file_splitter():
     lines = []
     form = SplitXMLForm()  
