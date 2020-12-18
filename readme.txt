@@ -1,7 +1,7 @@
 TMEAV - The Magic Email Address Validator
 
 This project has been written to play around with Python and Flask.
-All features requested by my wife :)
+All features requested by my wife ;)
 
 TMEAV provides a form to validate a single email address. It is also possible, to upload an XML containing several email addresses.
 In addition, TMEAV can extract all valid email addresses from an XML file an split them to chunks of different sizes.
